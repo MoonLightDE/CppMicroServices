@@ -129,15 +129,16 @@ us_cache_var(LIBRARY_INSTALL_DIR ${default_library_install_dir} STRING "Relative
 us_cache_var(ARCHIVE_INSTALL_DIR ${default_archive_install_dir} STRING "Relative install location for archives" ADVANCED)
 us_cache_var(HEADER_INSTALL_DIR ${default_header_install_dir} STRING "Relative install location for headers" ADVANCED)
 us_cache_var(AUXILIARY_INSTALL_DIR ${default_auxiliary_install_dir} STRING "Relative install location for auxiliary files" ADVANCED)
+set(AUXILIARY_CMAKE_INSTALL_DIR ${AUXILIARY_INSTALL_DIR}/cmake)
 
 us_cache_var(US_NAMESPACE "us" STRING "The namespace for the C++ micro services entities")
 us_cache_var(US_HEADER_PREFIX "" STRING "The file name prefix for the public C++ micro services header files")
 
 set(BUILD_SHARED_LIBS ${US_BUILD_SHARED_LIBS})
 
-set(${PROJECT_NAME}_MODULE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/usModuleInit.cpp" CACHE INTERNAL "The module initialization template code")
-set(${PROJECT_NAME}_EXECUTABLE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/usExecutableInit.cpp" CACHE INTERNAL "The executable initialization template code")
-
+set(US_MODULE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/usModuleInit.cpp" CACHE INTERNAL "The module initialization template code")
+set(US_EXECUTABLE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/usExecutableInit.cpp" CACHE INTERNAL "The executable initialization template code")
+ 
 #-----------------------------------------------------------------------------
 # US C/CXX Flags
 #-----------------------------------------------------------------------------
@@ -350,6 +351,7 @@ endif()
 
 set(us_config_h_file "${PROJECT_BINARY_DIR}/include/usConfig.h")
 configure_file(usConfig.h.in ${us_config_h_file})
+set(PACKAGE_CONFIG_CMAKE_DIR ${PROJECT_SOURCE_DIR}/CMake)
 
 set(US_RCC_EXECUTABLE_NAME usResourceCompiler)
 set(CppMicroServices_RCC_EXECUTABLE_NAME ${US_RCC_EXECUTABLE_NAME} CACHE INTERNAL "The target name of the usResourceCompiler executable.")
@@ -383,7 +385,7 @@ if(NOT US_IS_EMBEDDED)
          FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake)
   install(EXPORT ${PROJECT_NAME}Targets
           FILE ${PROJECT_NAME}Targets.cmake
-          DESTINATION ${AUXILIARY_INSTALL_DIR}/CMake/)
+          DESTINATION ${AUXILIARY_INSTALL_DIR})
 endif()
 
 set(_install_cmake_scripts
@@ -396,7 +398,7 @@ set(_install_cmake_scripts
   )
 
 install(FILES ${_install_cmake_scripts}
-        DESTINATION ${AUXILIARY_INSTALL_DIR}/CMake/
+        DESTINATION ${AUXILIARY_INSTALL_DIR}
   )
 
 # Configure CppMicroServicesConfig.cmake for the build tree
@@ -428,7 +430,7 @@ set(CONFIG_CMAKE_DIR ${AUXILIARY_INSTALL_DIR}/CMake)
 configure_package_config_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}Config.cmake.in
   ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${PROJECT_NAME}Config.cmake
-  INSTALL_DESTINATION ${AUXILIARY_INSTALL_DIR}/CMake/
+  INSTALL_DESTINATION ${AUXILIARY_INSTALL_DIR}
   PATH_VARS CONFIG_INCLUDE_DIR CONFIG_RUNTIME_DIR CONFIG_CMAKE_DIR
   NO_SET_AND_CHECK_MACRO
   NO_CHECK_REQUIRED_COMPONENTS_MACRO
@@ -443,7 +445,7 @@ configure_file(
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${PROJECT_NAME}Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-        DESTINATION ${AUXILIARY_INSTALL_DIR}/CMake/
+        DESTINATION ${AUXILIARY_INSTALL_DIR}
         ${US_SDK_INSTALL_COMPONENT}
   )
 
