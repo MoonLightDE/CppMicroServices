@@ -137,8 +137,8 @@ us_cache_var(US_HEADER_PREFIX "" STRING "The file name prefix for the public C++
 
 set(BUILD_SHARED_LIBS ${US_BUILD_SHARED_LIBS})
 
-set(US_MODULE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/usModuleInit.cpp" CACHE INTERNAL "The module initialization template code")
-set(US_EXECUTABLE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/usExecutableInit.cpp" CACHE INTERNAL "The executable initialization template code")
+set(${PROJECT_NAME}_MODULE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/usModuleInit.cpp" CACHE INTERNAL "The module initialization template code")
+set(${PROJECT_NAME}_EXECUTABLE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/usExecutableInit.cpp" CACHE INTERNAL "The executable initialization template code")
  
 #-----------------------------------------------------------------------------
 # US C/CXX Flags
