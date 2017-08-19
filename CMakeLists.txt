@@ -129,7 +129,8 @@ us_cache_var(LIBRARY_INSTALL_DIR ${default_library_install_dir} STRING "Relative
 us_cache_var(ARCHIVE_INSTALL_DIR ${default_archive_install_dir} STRING "Relative install location for archives" ADVANCED)
 us_cache_var(HEADER_INSTALL_DIR ${default_header_install_dir} STRING "Relative install location for headers" ADVANCED)
 us_cache_var(AUXILIARY_INSTALL_DIR ${default_auxiliary_install_dir} STRING "Relative install location for auxiliary files" ADVANCED)
-set(AUXILIARY_CMAKE_INSTALL_DIR ${AUXILIARY_INSTALL_DIR}/cmake)
+# directory must be lowercase, and also must define path relative, due very non-standar behaviour of this lib
+set(AUXILIARY_CMAKE_INSTALL_DIR ${AUXILIARY_INSTALL_DIR}/CMake)
 
 us_cache_var(US_NAMESPACE "us" STRING "The namespace for the C++ micro services entities")
 us_cache_var(US_HEADER_PREFIX "" STRING "The file name prefix for the public C++ micro services header files")
