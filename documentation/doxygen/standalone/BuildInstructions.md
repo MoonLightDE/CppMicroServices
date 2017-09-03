@@ -1,7 +1,7 @@
 Build Instructions    {#BuildInstructions}
 ==================
 
-The C++ Micro Services library provides [CMake][cmake] build scripts which allow the generation of
+The C++ Micro Services library provides [cmake][cmake] build scripts which allow the generation of
 platform and IDE specific project files.
 
 The library should compile on many different platforms. Below is a list of tested compiler/OS combinations:
@@ -16,7 +16,7 @@ The library should compile on many different platforms. Below is a list of teste
 Prerequisites
 -------------
 
-- [CMake][cmake] 2.8 (Visual Studio 2010 and 2012 users should use the latest CMake version available)
+- [cmake][cmake] 2.8 +
 
 
 Configuring the Build

@@ -14,7 +14,7 @@ cmake_policy(SET CMP0017 NEW)
 #------------------------------------------------------------------------------
 
 set(CMAKE_MODULE_PATH
-  ${PROJECT_SOURCE_DIR}/CMake
+  ${PROJECT_SOURCE_DIR}/cmake
   ${CMAKE_MODULE_PATH}
   )
 
@@ -135,8 +135,8 @@ us_cache_var(US_HEADER_PREFIX "" STRING "The file name prefix for the public C++
 
 set(BUILD_SHARED_LIBS ${US_BUILD_SHARED_LIBS})
 
-set(${PROJECT_NAME}_MODULE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/usModuleInit.cpp" CACHE INTERNAL "The module initialization template code")
-set(${PROJECT_NAME}_EXECUTABLE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/usExecutableInit.cpp" CACHE INTERNAL "The executable initialization template code")
+set(${PROJECT_NAME}_MODULE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/usModuleInit.cpp" CACHE INTERNAL "The module initialization template code")
+set(${PROJECT_NAME}_EXECUTABLE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/usExecutableInit.cpp" CACHE INTERNAL "The executable initialization template code")
 
 #-----------------------------------------------------------------------------
 # US C/CXX Flags
@@ -383,27 +383,27 @@ if(NOT US_IS_EMBEDDED)
          FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake)
   install(EXPORT ${PROJECT_NAME}Targets
           FILE ${PROJECT_NAME}Targets.cmake
-          DESTINATION ${AUXILIARY_INSTALL_DIR}/CMake/)
+          DESTINATION ${AUXILIARY_INSTALL_DIR}/cmake/)
 endif()
 
 set(_install_cmake_scripts
   ${${PROJECT_NAME}_MODULE_INIT_TEMPLATE}
   ${${PROJECT_NAME}_EXECUTABLE_INIT_TEMPLATE}
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/CMakeParseArguments.cmake
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/usFunctionGenerateModuleInit.cmake
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/usFunctionGenerateExecutableInit.cmake
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/usFunctionEmbedResources.cmake
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/CMakeParseArguments.cmake
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/usFunctionGenerateModuleInit.cmake
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/usFunctionGenerateExecutableInit.cmake
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/usFunctionEmbedResources.cmake
   )
 
 install(FILES ${_install_cmake_scripts}
-        DESTINATION ${AUXILIARY_INSTALL_DIR}/CMake/
+        DESTINATION ${AUXILIARY_INSTALL_DIR}/cmake/
   )
 
 # Configure CppMicroServicesConfig.cmake for the build tree
 
 set(PACKAGE_CONFIG_INCLUDE_DIR ${US_INCLUDE_DIRS})
 set(PACKAGE_CONFIG_RUNTIME_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-set(PACKAGE_CONFIG_CMAKE_DIR ${PROJECT_SOURCE_DIR}/CMake)
+set(PACKAGE_CONFIG_CMAKE_DIR ${PROJECT_SOURCE_DIR}/cmake)
 if(US_IS_EMBEDDED)
   set(PACKAGE_EMBEDDED "if(@PROJECT_NAME@_IS_EMBEDDED)
   set(@PROJECT_NAME@_INTERNAL_INCLUDE_DIRS @US_INTERNAL_INCLUDE_DIRS@)
@@ -424,11 +424,11 @@ configure_file(
 # Configure CppMicroServicesConfig.cmake for the install tree
 set(CONFIG_INCLUDE_DIR ${HEADER_INSTALL_DIR})
 set(CONFIG_RUNTIME_DIR ${RUNTIME_INSTALL_DIR})
-set(CONFIG_CMAKE_DIR ${AUXILIARY_INSTALL_DIR}/CMake)
+set(CONFIG_CMAKE_DIR ${AUXILIARY_INSTALL_DIR}/cmake)
 configure_package_config_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}Config.cmake.in
   ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${PROJECT_NAME}Config.cmake
-  INSTALL_DESTINATION ${AUXILIARY_INSTALL_DIR}/CMake/
+  INSTALL_DESTINATION ${AUXILIARY_INSTALL_DIR}/cmake/
   PATH_VARS CONFIG_INCLUDE_DIR CONFIG_RUNTIME_DIR CONFIG_CMAKE_DIR
   NO_SET_AND_CHECK_MACRO
   NO_CHECK_REQUIRED_COMPONENTS_MACRO
@@ -443,7 +443,7 @@ configure_file(
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${PROJECT_NAME}Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-        DESTINATION ${AUXILIARY_INSTALL_DIR}/CMake/
+        DESTINATION ${AUXILIARY_INSTALL_DIR}/cmake/
         ${US_SDK_INSTALL_COMPONENT}
   )
 
