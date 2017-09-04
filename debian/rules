@@ -1,0 +1,17 @@
+#!/usr/bin/make -f
+
+DH_VERBOSE = 1
+
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/default.mk
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@  --buildsystem=cmake
+
+# NOTE: if package project name or namespace changed, 
+# here must be changed and tune if cmake files are not fixed yet for multiarch
+override_dh_auto_configure:
+	dh_auto_configure -- -DLIBRARY_INSTALL_DIR=lib/$(DEB_HOST_MULTIARCH) -DAUXILIARY_INSTALL_DIR=lib/$(DEB_HOST_MULTIARCH)/cmake/CppMicroServices
+

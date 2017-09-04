@@ -1,8 +1,12 @@
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set (CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/installed" CACHE PATH "default install path" FORCE )
+endif()
+
 project(CppMicroServices)
 
 set(${PROJECT_NAME}_MAJOR_VERSION 2)
 set(${PROJECT_NAME}_MINOR_VERSION 1)
-set(${PROJECT_NAME}_PATCH_VERSION 0)
+set(${PROJECT_NAME}_PATCH_VERSION 1)
 set(${PROJECT_NAME}_VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_VERSION})
 
 cmake_minimum_required(VERSION 2.8)
@@ -14,7 +18,7 @@ cmake_policy(SET CMP0017 NEW)
 #------------------------------------------------------------------------------
 
 set(CMAKE_MODULE_PATH
-  ${PROJECT_SOURCE_DIR}/CMake
+  ${PROJECT_SOURCE_DIR}/cmake
   ${CMAKE_MODULE_PATH}
   )
 
@@ -50,8 +54,8 @@ endforeach()
 #-----------------------------------------------------------------------------
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message(STATUS "Setting build type to 'Debug' as none was specified.")
-  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
+  message(STATUS "Setting build type to 'Debug+Release' as none was specified.")
+  set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Choose the type of build." FORCE)
 
   # Set the possible values of build type for cmake-gui
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY
@@ -110,33 +114,25 @@ us_cache_var(US_ENABLE_RESOURCE_COMPRESSION ON BOOL "Enable resource compression
 us_cache_var(US_BUILD_SHARED_LIBS ON BOOL "Build shared libraries")
 us_cache_var(US_BUILD_TESTING OFF BOOL "Build tests")
 
-if(WIN32 AND NOT CYGWIN)
-  set(default_runtime_install_dir bin/)
-  set(default_library_install_dir bin/)
-  set(default_archive_install_dir lib/)
-  set(default_header_install_dir include/)
-  set(default_auxiliary_install_dir share/)
-else()
-  set(default_runtime_install_dir bin/)
-  set(default_library_install_dir lib/${PROJECT_NAME})
-  set(default_archive_install_dir lib/${PROJECT_NAME})
-  set(default_header_install_dir include/${PROJECT_NAME})
-  set(default_auxiliary_install_dir share/${PROJECT_NAME})
-endif()
+us_cache_var(US_NAMESPACE "us" STRING "The namespace for the C++ micro services entities")
+us_cache_var(US_HEADER_PREFIX "" STRING "The file name prefix for the public C++ micro services header files")
+
+set(default_runtime_install_dir bin/)
+set(default_library_install_dir lib/)
+set(default_archive_install_dir lib/${PROJECT_NAME})
+set(default_header_install_dir include/${US_NAMESPACE})
+set(default_auxiliary_install_dir lib/cmake/${PROJECT_NAME})
 
 us_cache_var(RUNTIME_INSTALL_DIR ${default_runtime_install_dir} STRING "Relative install location for binaries" ADVANCED)
 us_cache_var(LIBRARY_INSTALL_DIR ${default_library_install_dir} STRING "Relative install location for libraries" ADVANCED)
 us_cache_var(ARCHIVE_INSTALL_DIR ${default_archive_install_dir} STRING "Relative install location for archives" ADVANCED)
 us_cache_var(HEADER_INSTALL_DIR ${default_header_install_dir} STRING "Relative install location for headers" ADVANCED)
-us_cache_var(AUXILIARY_INSTALL_DIR ${default_auxiliary_install_dir} STRING "Relative install location for auxiliary files" ADVANCED)
-
-us_cache_var(US_NAMESPACE "us" STRING "The namespace for the C++ micro services entities")
-us_cache_var(US_HEADER_PREFIX "" STRING "The file name prefix for the public C++ micro services header files")
+us_cache_var(AUXILIARY_INSTALL_DIR ${default_auxiliary_install_dir} STRING "Relative install location for cmake files" ADVANCED)
 
 set(BUILD_SHARED_LIBS ${US_BUILD_SHARED_LIBS})
 
-set(${PROJECT_NAME}_MODULE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/usModuleInit.cpp")
-set(${PROJECT_NAME}_EXECUTABLE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/usExecutableInit.cpp")
+set(${PROJECT_NAME}_MODULE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/usModuleInit.cpp" CACHE INTERNAL "The module initialization template code")
+set(${PROJECT_NAME}_EXECUTABLE_INIT_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/usExecutableInit.cpp" CACHE INTERNAL "The executable initialization template code")
 
 #-----------------------------------------------------------------------------
 # US C/CXX Flags
@@ -352,7 +348,7 @@ set(us_config_h_file "${PROJECT_BINARY_DIR}/include/usConfig.h")
 configure_file(usConfig.h.in ${us_config_h_file})
 
 set(US_RCC_EXECUTABLE_NAME usResourceCompiler)
-set(CppMicroServices_RCC_EXECUTABLE_NAME ${US_RCC_EXECUTABLE_NAME})
+set(CppMicroServices_RCC_EXECUTABLE_NAME ${US_RCC_EXECUTABLE_NAME} CACHE INTERNAL "The target name of the usResourceCompiler executable.")
 
 add_subdirectory(tools)
 
@@ -383,27 +379,27 @@ if(NOT US_IS_EMBEDDED)
          FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake)
   install(EXPORT ${PROJECT_NAME}Targets
           FILE ${PROJECT_NAME}Targets.cmake
-          DESTINATION ${AUXILIARY_INSTALL_DIR}/CMake/)
+          DESTINATION ${AUXILIARY_INSTALL_DIR}/)
 endif()
 
 set(_install_cmake_scripts
   ${${PROJECT_NAME}_MODULE_INIT_TEMPLATE}
   ${${PROJECT_NAME}_EXECUTABLE_INIT_TEMPLATE}
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/CMakeParseArguments.cmake
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/usFunctionGenerateModuleInit.cmake
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/usFunctionGenerateExecutableInit.cmake
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake/usFunctionEmbedResources.cmake
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/CMakeParseArguments.cmake
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/usFunctionGenerateModuleInit.cmake
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/usFunctionGenerateExecutableInit.cmake
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/usFunctionEmbedResources.cmake
   )
 
 install(FILES ${_install_cmake_scripts}
-        DESTINATION ${AUXILIARY_INSTALL_DIR}/CMake/
+        DESTINATION ${AUXILIARY_INSTALL_DIR}/
   )
 
 # Configure CppMicroServicesConfig.cmake for the build tree
 
 set(PACKAGE_CONFIG_INCLUDE_DIR ${US_INCLUDE_DIRS})
 set(PACKAGE_CONFIG_RUNTIME_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-set(PACKAGE_CONFIG_CMAKE_DIR ${PROJECT_SOURCE_DIR}/CMake)
+set(PACKAGE_CONFIG_CMAKE_DIR ${PROJECT_SOURCE_DIR}/cmake)
 if(US_IS_EMBEDDED)
   set(PACKAGE_EMBEDDED "if(@PROJECT_NAME@_IS_EMBEDDED)
   set(@PROJECT_NAME@_INTERNAL_INCLUDE_DIRS @US_INTERNAL_INCLUDE_DIRS@)
@@ -424,11 +420,11 @@ configure_file(
 # Configure CppMicroServicesConfig.cmake for the install tree
 set(CONFIG_INCLUDE_DIR ${HEADER_INSTALL_DIR})
 set(CONFIG_RUNTIME_DIR ${RUNTIME_INSTALL_DIR})
-set(CONFIG_CMAKE_DIR ${AUXILIARY_INSTALL_DIR}/CMake)
+set(CONFIG_CMAKE_DIR ${AUXILIARY_INSTALL_DIR})
 configure_package_config_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}Config.cmake.in
   ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${PROJECT_NAME}Config.cmake
-  INSTALL_DESTINATION ${AUXILIARY_INSTALL_DIR}/CMake/
+  INSTALL_DESTINATION ${AUXILIARY_INSTALL_DIR}/
   PATH_VARS CONFIG_INCLUDE_DIR CONFIG_RUNTIME_DIR CONFIG_CMAKE_DIR
   NO_SET_AND_CHECK_MACRO
   NO_CHECK_REQUIRED_COMPONENTS_MACRO
@@ -443,7 +439,7 @@ configure_file(
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${PROJECT_NAME}Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-        DESTINATION ${AUXILIARY_INSTALL_DIR}/CMake/
+        DESTINATION ${AUXILIARY_INSTALL_DIR}/
         ${US_SDK_INSTALL_COMPONENT}
   )
 

@@ -1,0 +1,10 @@
+mlde.l.cppmicroservices for Debian
+----------------------------------
+
+microcppservices was in early stage when moonlight desktop started.. this its a fork
+
+the paths to install does not follow the standars, so here the aux files are the cmake paths
+
+those paths was set manually respect multiarch support in the rules file.
+
+ -- PICCORO Lenz McKAY <mckaygerhard@gmail.com>  Mon, 04 Sep 2017 03:58:55 -0400

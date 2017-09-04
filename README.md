@@ -1,53 +1,86 @@
-[![Build Status](https://secure.travis-ci.org/saschazelzer/CppMicroServices.png)](http://travis-ci.org/saschazelzer/CppMicroServices)
+MLDE - C++ micro services library comunication
+==============================================
 
-C++ Micro Services
-==================
+MLDE OSGi-like C++ dynamic service registry for internals comunications, was forked from http://cppmicroservices.org
 
-Introduction
-------------
+Moonlight related fork introduction:
+------------------------------------
 
-The C++ Micro Services library provides a dynamic service registry and module system,
-partially based the OSGi Core Release 5 specifications. It enables developers to create
-a service oriented and dynamic software stack.
+This library provides a dynamic service registry and module system integration for MLDE interaction between modules.
 
-Proper usage of the C++ Micro Services library leads to
+### Objetive library functionality:
 
-  - Re-use of software components
-  - Loose coupling
-  - Separation of concerns
-  - Clean APIs based on service interfaces
-  - Extensible systems
+It enables Moonlight Desktop developers to **modularize** and integrate using registers, external code 
+into MLDE as embebed services. Umm this sounds like guindoze OS? well but currently its makes faster comunications  
+of the QT5 implementation of MLDE, rather usage of dbus. Yeah its not standar but its light and faster.
 
-and more.
+Status
+------
+
+**STALED** patches and bugfixeds received, request for a mantainer.
+
+Currenly the project library are staled  due MLDE implements light modified version of, if you are interesting 
+to become mantainer please contact Azubieta or PICCORO for request and coordination in mail list of google group.
 
 Requirements
 ------------
 
-This is a pure C++ implementation of the OSGi service model and does not have any third-party
-library dependencies.
+A C++ compiler with C++11 features its mandatory:
 
-Supported Platforms
+  - C++ compiler:
+    - GCC >> 4.6
+    - Clang >> 3.2
+  - Cmake >> 2.9
+
+Install and Supported Platforms
 -------------------
 
-The library should compile on many different platforms. Below is a list of tested compiler/OS combinations:
+At the moment of the last development artifact the library was staled in 2.X version, 
+currently only Linux and some FreeBSD are supported.
 
-  - GCC 4.6 (Ubuntu 12.04)
-  - GCC 4.8 (Ubuntu 13.10)
-  - Clang 3.2 (Ubuntu 13.10)
-  - Clang (MacOS X 10.8 and 10.9)
-  - Visual Studio 2008 SP1, 2010, 2012, 2013 (Windows 7)
+### Build and install
+
+The 'cmake' process are used to compile and install:
+
+  1. Download source into a directory
+  2. Prepare to compile: `mkdir build;cd build`
+  3. Configure it: `cmake ..`
+  4. Build: `make`
+
+So once build and do a local unix like install: `make install`, and all files will be installed 
+into the new `build/installed` directory due `PREFIX` are set to that path if not specified.
+
+There's some variables that can be override at build:
+
++ `CMAKE_INSTALL_PREFIX` : by default set to `installed` under current build dir compilation
++ `LIBRARY_INSTALL_DIR` : by default set to `{PREFIX}/lib` here will be the shared libs files
++ `AUXILIARY_INSTALL_DIR` : by default set to `{PREFIX}/lib/cmake/{PROJECT_NAME}` and are the cmake files
+
+There's some variables that can be set at install:
+
++ `DESTDIR` : by default set to `/` unless CMAKE_INSTALL_PREFIX were not set!
+
+If you override one of, all the path will be changed.
+Yeah when microcppservices started, those paths were set very bad!
+
+If you wish this library documentation to be generated before install, you must have installed `doxygen`, 
+the generated documentation will be at: `{PREFIX}/share/CppMicroServices/doc/`.
 
 Legal
 -----
 
 Copyright (c) German Cancer Research Center. Licensed under the [Apache License v2.0][apache_license].
 
-Quick Start
------------
+MLDE - C++ micro services Development implementation
+==========================
+
+ORIGIANL 3.X LIB: [![Build Status](https://secure.travis-ci.org/saschazelzer/CppMicroServices.png)](http://travis-ci.org/saschazelzer/CppMicroServices)
 
 Essentially, the C++ Micro Services library provides you with a powerful dynamic service registry.
 Each shared or static library has an associated `ModuleContext` object, through which the service
 registry is accessed.
+
+### integrating and registering service objects/applications
 
 To query the registry for a service object implementing one or more specific interfaces, the code
 would look like this:
@@ -69,6 +102,8 @@ void UseService(ModuleContext* context)
 }
 ```
 
+### registering a service object:
+
 Registering a service object against a certain interface looks like this:
 
 ```cpp
@@ -89,10 +124,3 @@ Please see the [Documentation](http://cppmicroservices.org/doc_latest/index.html
 examples and tutorials and the API reference. There is also a blog post about
 [OSGi Lite for C++](http://blog.cppmicroservices.org/2012/04/15/osgi-lite-for-c++).
 
-Build Instructions
-------------------
-
-Please visit the [Build Instructions][bi_master] page online.
-
-[bi_master]: http://cppmicroservices.org/doc_latest/BuildInstructions.html
-[apache_license]: http://www.apache.org/licenses/LICENSE-2.0
