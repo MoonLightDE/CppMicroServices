@@ -6,18 +6,21 @@ MLDE OSGi-like C++ dynamic service registry for internals comunications, was for
 Moonlight related fork introduction:
 ------------------------------------
 
-This library provides a dynamic service registry and module system integration.
+This library provides a dynamic service registry and module system integration for MLDE interaction between modules.
 
 ### Objetive library functionality:
 
-It enables Moonlight Desktop developers to **modularize** and integrate using registers, external code into MLDE as embebed services. Umm this sounds like guindoze OS? well but currently its faster due the QT5 impelmentation of MLDE.
+It enables Moonlight Desktop developers to **modularize** and integrate using registers, external code 
+into MLDE as embebed services. Umm this sounds like guindoze OS? well but currently its makes faster comunications  
+of the QT5 implementation of MLDE, rather usage of dbus. Yeah its not standar but its light and faster.
 
 Status
 ------
 
 **STALED** patches and bugfixeds received, request for a mantainer.
 
-Currenly the project library are staled  due MLDE impelments light modified version of, if you are interesting to become mantainer please contact Azubieta or PICCORO for request and coordination in issue mlde.d.moonlightde#39.
+Currenly the project library are staled  due MLDE implements light modified version of, if you are interesting 
+to become mantainer please contact Azubieta or PICCORO for request and coordination in mail list of google group.
 
 Requirements
 ------------
@@ -32,17 +35,36 @@ A C++ compiler with C++11 features its mandatory:
 Install and Supported Platforms
 -------------------
 
-Extended documentation can be foun in docs directory of the MLDE main repository. At the moment of the last development artifact the library was staled in 2.X version, currently only Linux and some FreeBSD are supported.
+At the moment of the last development artifact the library was staled in 2.X version, 
+currently only Linux and some FreeBSD are supported.
 
 ### Build and install
 
 The 'cmake' process are used to compile and install:
 
-  1. Download source into it to compile: `mkdir build;cd build`
-  2. Configure it: `cmake .. -DLIBRARY_INSTALL_DIR=/usr/local/lib`
-  3. Build: `make`
+  1. Download source into a directory
+  2. Prepare to compile: `mkdir build;cd build`
+  3. Configure it: `cmake ..`
+  4. Build: `make`
 
-So once build and do a local unix like install: `make install`, if you wish this library documentation to be generated before install, you must have installed `doxygen`, the generated documentation will be at: `/usr/local/share/CppMicroServices/doc/`.
+So once build and do a local unix like install: `make install`, and all files will be installed 
+into the new `build/installed` directory due `PREFIX` are set to that path if not specified.
+
+There's some variables that can be override at build:
+
++ `CMAKE_INSTALL_PREFIX` : by default set to `installed` under current build dir compilation
++ `LIBRARY_INSTALL_DIR` : by default set to `{PREFIX}/lib` here will be the shared libs files
++ `AUXILIARY_INSTALL_DIR` : by default set to `{PREFIX}/lib/cmake/{PROJECT_NAME}` and are the cmake files
+
+There's some variables that can be set at install:
+
++ `DESTDIR` : by default set to `/` unless CMAKE_INSTALL_PREFIX were not set!
+
+If you override one of, all the path will be changed.
+Yeah when microcppservices started, those paths were set very bad!
+
+If you wish this library documentation to be generated before install, you must have installed `doxygen`, 
+the generated documentation will be at: `{PREFIX}/share/CppMicroServices/doc/`.
 
 Legal
 -----
