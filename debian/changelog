@@ -1,0 +1,5 @@
+mlde.l.cppmicroservices (2.1.1-1) unstable; urgency=low
+
+  * set in debian rules aux files and install respect multiarch paths
+
+ -- PICCORO Lenz McKAY <mckaygerhard@gmail.com>  Fri, 18 Aug 2017 23:29:28 -0400

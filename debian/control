@@ -1,0 +1,22 @@
+Source: mlde.l.cppmicroservices
+Section: libs
+Priority: optional
+Maintainer: PICCORO Lenz McKAY <mckaygerhard@gmail.com>
+Build-Depends: debhelper (>= 8), cmake, build-essential
+Standards-Version: 3.9.5
+Homepage: https://github.com/MoonLightDE/mlde.l.cppmicroservices
+
+Package: lib.mlde.l.cppmicroservices-dev
+Architecture: any
+Section: libdevel
+Depends: lib.mlde.l.cppmicroservices2 (= ${binary:Version}), ${misc:Depends}
+Description: C++ Micro Services library for internal communications - development files
+ MLDE (Moonlight desktop environment) C++ Micro Services library
+ are a own library for internal communications - development files
+
+Package: lib.mlde.l.cppmicroservices2
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: C++ Micro Services library for internal communications - shared
+ MLDE (Moonlight desktop environment) C++ Micro Services library
+ are a own library for internal communications - development files

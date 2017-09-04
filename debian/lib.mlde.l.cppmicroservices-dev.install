@@ -1,0 +1,4 @@
+usr/bin/*
+usr/lib/*/cmake
+usr/lib/*/*.so
+usr/include
