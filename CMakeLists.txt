@@ -1,3 +1,7 @@
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set (CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/installed" CACHE PATH "default install path" FORCE )
+endif()
+
 project(CppMicroServices)
 
 set(${PROJECT_NAME}_MAJOR_VERSION 2)
@@ -114,7 +118,7 @@ us_cache_var(US_NAMESPACE "us" STRING "The namespace for the C++ micro services 
 us_cache_var(US_HEADER_PREFIX "" STRING "The file name prefix for the public C++ micro services header files")
 
 set(default_runtime_install_dir bin/)
-set(default_library_install_dir lib/${PROJECT_NAME})
+set(default_library_install_dir lib/)
 set(default_archive_install_dir lib/${PROJECT_NAME})
 set(default_header_install_dir include/${US_NAMESPACE})
 set(default_auxiliary_install_dir lib/cmake/${PROJECT_NAME})
