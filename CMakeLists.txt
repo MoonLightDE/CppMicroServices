@@ -110,28 +110,20 @@ us_cache_var(US_ENABLE_RESOURCE_COMPRESSION ON BOOL "Enable resource compression
 us_cache_var(US_BUILD_SHARED_LIBS ON BOOL "Build shared libraries")
 us_cache_var(US_BUILD_TESTING OFF BOOL "Build tests")
 
-if(WIN32 AND NOT CYGWIN)
-  set(default_runtime_install_dir bin/)
-  set(default_library_install_dir bin/)
-  set(default_archive_install_dir lib/)
-  set(default_header_install_dir include/)
-  set(default_auxiliary_install_dir share/)
-else()
-  set(default_runtime_install_dir bin/)
-  set(default_library_install_dir lib/${PROJECT_NAME})
-  set(default_archive_install_dir lib/${PROJECT_NAME})
-  set(default_header_install_dir include/${PROJECT_NAME})
-  set(default_auxiliary_install_dir share/${PROJECT_NAME})
-endif()
+us_cache_var(US_NAMESPACE "us" STRING "The namespace for the C++ micro services entities")
+us_cache_var(US_HEADER_PREFIX "" STRING "The file name prefix for the public C++ micro services header files")
+
+set(default_runtime_install_dir bin/)
+set(default_library_install_dir lib/${PROJECT_NAME})
+set(default_archive_install_dir lib/${PROJECT_NAME})
+set(default_header_install_dir include/${US_NAMESPACE})
+set(default_auxiliary_install_dir lib/cmake/${PROJECT_NAME})
 
 us_cache_var(RUNTIME_INSTALL_DIR ${default_runtime_install_dir} STRING "Relative install location for binaries" ADVANCED)
 us_cache_var(LIBRARY_INSTALL_DIR ${default_library_install_dir} STRING "Relative install location for libraries" ADVANCED)
 us_cache_var(ARCHIVE_INSTALL_DIR ${default_archive_install_dir} STRING "Relative install location for archives" ADVANCED)
 us_cache_var(HEADER_INSTALL_DIR ${default_header_install_dir} STRING "Relative install location for headers" ADVANCED)
-us_cache_var(AUXILIARY_INSTALL_DIR ${default_auxiliary_install_dir} STRING "Relative install location for auxiliary files" ADVANCED)
-
-us_cache_var(US_NAMESPACE "us" STRING "The namespace for the C++ micro services entities")
-us_cache_var(US_HEADER_PREFIX "" STRING "The file name prefix for the public C++ micro services header files")
+us_cache_var(AUXILIARY_INSTALL_DIR ${default_auxiliary_install_dir} STRING "Relative install location for cmake files" ADVANCED)
 
 set(BUILD_SHARED_LIBS ${US_BUILD_SHARED_LIBS})
 
@@ -383,7 +375,7 @@ if(NOT US_IS_EMBEDDED)
          FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake)
   install(EXPORT ${PROJECT_NAME}Targets
           FILE ${PROJECT_NAME}Targets.cmake
-          DESTINATION ${AUXILIARY_INSTALL_DIR}/cmake/)
+          DESTINATION ${AUXILIARY_INSTALL_DIR}/)
 endif()
 
 set(_install_cmake_scripts
@@ -396,7 +388,7 @@ set(_install_cmake_scripts
   )
 
 install(FILES ${_install_cmake_scripts}
-        DESTINATION ${AUXILIARY_INSTALL_DIR}/cmake/
+        DESTINATION ${AUXILIARY_INSTALL_DIR}/
   )
 
 # Configure CppMicroServicesConfig.cmake for the build tree
@@ -424,11 +416,11 @@ configure_file(
 # Configure CppMicroServicesConfig.cmake for the install tree
 set(CONFIG_INCLUDE_DIR ${HEADER_INSTALL_DIR})
 set(CONFIG_RUNTIME_DIR ${RUNTIME_INSTALL_DIR})
-set(CONFIG_CMAKE_DIR ${AUXILIARY_INSTALL_DIR}/cmake)
+set(CONFIG_CMAKE_DIR ${AUXILIARY_INSTALL_DIR})
 configure_package_config_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}Config.cmake.in
   ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${PROJECT_NAME}Config.cmake
-  INSTALL_DESTINATION ${AUXILIARY_INSTALL_DIR}/cmake/
+  INSTALL_DESTINATION ${AUXILIARY_INSTALL_DIR}/
   PATH_VARS CONFIG_INCLUDE_DIR CONFIG_RUNTIME_DIR CONFIG_CMAKE_DIR
   NO_SET_AND_CHECK_MACRO
   NO_CHECK_REQUIRED_COMPONENTS_MACRO
@@ -443,7 +435,7 @@ configure_file(
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${PROJECT_NAME}Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-        DESTINATION ${AUXILIARY_INSTALL_DIR}/cmake/
+        DESTINATION ${AUXILIARY_INSTALL_DIR}/
         ${US_SDK_INSTALL_COMPONENT}
   )
 
